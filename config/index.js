@@ -1,6 +1,6 @@
 module.exports = {
     //端口号
-    port: 8080,
+    port: 8088,
     // 信任IP
     trustProxy: ['127.0.0.1'],
     // redis参数

@@ -1,10 +1,7 @@
-//引入redis
-const redis = require('../../plugins/redis');
-const { upload } = require('../../plugins/upload');
 module.exports = function (router, services) {
     //注册
     router.post('/api/common/v1/register', async function (req, res) {
-        let data = await services.judgeMailboxUser(req.body);
+        let data = await services.judgeEmailUser(req.body);
         if (data.code == 300) {
             let data = await services.userRegisterWrite(req.body);
             res.json(data);
@@ -24,5 +21,23 @@ module.exports = function (router, services) {
             ip: req.ip
         });
         res.json(data);
+    });
+    // 修改密码
+    router.post('/api/common/v1/forget_password', async function (req, res) {
+        let data = await services.judgeEmailUser(req.body);
+        if (data.code == 200) {
+            let data = await services.checkCode(req.body);
+            if (data.code == 200) {
+                let data = await services.userDataModify({
+                    email: req.body.email,
+                    password: req.body.password 
+                });
+                res.json(data);
+            } else {
+                res.json(data);
+            }
+        } else {
+            res.json(data);
+        }
     });
 }

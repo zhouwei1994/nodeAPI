@@ -27,22 +27,11 @@ services.check = function (data, must, callback) {
         }
         if (success) {
             if (callback) {
-                callback(
-                    function (data = null, msg = "", code = 0, callback) {
+                callback(resolve,function (data = null, msg = "", code = 0, callback) {
                         if (data) {
                             code = 200;
                         }
                         resolve({
-                            data: data,
-                            code: code,
-                            msg: msg,
-                        })
-                    },
-                    function (data = null, msg = "", code = 0, callback) {
-                        if (data) {
-                            code = 200;
-                        }
-                        reject({
                             data: data,
                             code: code,
                             msg: msg,

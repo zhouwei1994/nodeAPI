@@ -87,10 +87,8 @@ class sendMail {
                     } else {
                         reject(error);
                     }
-                    console.log(error);
                 } else {
                     resolve(response);
-                    console.log('发送成功')
                 }
             });
         });

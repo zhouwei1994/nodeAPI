@@ -18,5 +18,6 @@ class Models {
     }
 }
 let model = new Models();
+require('./common.js')(model);
 require('./users.js')(model);
 module.exports = model;
