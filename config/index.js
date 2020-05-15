@@ -1,4 +1,7 @@
+
 module.exports = {
+    // 域名
+    host: 'http://192.168.1.10',
     //端口号
     port: 8088,
     // 信任IP

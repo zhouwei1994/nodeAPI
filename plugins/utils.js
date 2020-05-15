@@ -1,4 +1,6 @@
 const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
 //密文
 const ciphertext = 'hex';
 //解决中文不同的问题
@@ -32,7 +34,29 @@ exports.createUserToken = function (len = 64) {
     }
     return code;
 }
-
+// 创建多级目录
+exports.makeDir = function (dirpath) {
+    if (fs.existsSync(dirpath)) {
+        return true;
+    } else {
+        let pathtmp = "";
+        dirpath.split("/").forEach(function (dirname) {
+            if (pathtmp) {
+                pathtmp = path.join(pathtmp, dirname);
+            } else if (dirname) {
+                //如果在linux系统中，第一个dirname的值为空，所以赋值为"/"
+                pathtmp = dirname;
+            } else {
+                pathtmp = "/";
+            }
+            if (!fs.existsSync(pathtmp)) {
+                if (!fs.mkdirSync(pathtmp)) {
+                    return false;
+                }
+            }
+        });
+    }
+}
 /**
  * 时间戳转换为想要的时间格式
  */

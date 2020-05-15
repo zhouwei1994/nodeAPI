@@ -30,8 +30,6 @@ module.exports = function(config, callback) {
     app.use(cookieParser());
     //指定静态文件名称是 public, 文件夹名可自定义
     app.use(express.static(path.join(__dirname, '../public')));
-
-
     //为 Express 设置代理
     app.set('trust proxy', function (ip) {
         console.log("访问的IP", ip);

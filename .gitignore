@@ -1,8 +1,8 @@
-.DS_Store
 node_modules
 unpackage
-/dist
-vue.config
+logs
+public/images
+public/file
 
 # local env files
 .env.local
