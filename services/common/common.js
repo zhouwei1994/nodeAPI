@@ -28,7 +28,16 @@ module.exports = function (services, models) {
         return services.check(data, ["pid"], function (resolve, callback) {
             models.getRegion(data).then(res => {
                 if (res.length > 0) {
-                    callback(res);
+                    let regionList = [];
+                    res.forEach(item => {
+                        regionList.push({
+                            objId: item.id,
+                            pid: item.pid,
+                            level: item.level,
+                            name: item.name
+                        });
+                    });
+                    callback(regionList);
                 } else {
                     callback(null, "未找到地区数据");
                 }

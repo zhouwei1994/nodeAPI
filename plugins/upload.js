@@ -25,35 +25,79 @@ exports.uploadFile = function (req, res) {
     const userDirPath = 'file/';
     upload(req, userDirPath, function (type) {
         let fileType = type.split('/')[0];
-        if (["audio", "video",  "text"].includes(fileType)) {
+        if (["audio", "video", "text", "application"].includes(fileType)) {
             return true;
         } else {
             res.json({
                 code: 302,
-                msg: '请上传音频、视频、文本',
+                msg: '请上传音频、视频、文本、文件',
                 data: null
             });
             return false;
         }
     }, function (msg) {
-            res.json(msg); 
+        res.json(msg);
     });
 }
 function upload(req, userDirPath, filterBcak, callback) {
     userDirPath = userDirPath + (new Date().format("yyyy/MM-dd")) + "/";
     makeDir("public/" + userDirPath);
+    let allFiles = [];
+    let fileData = [];
+    let allow = true;
     const form = new formidable.IncomingForm(); //创建上传表单
     form.encoding = 'utf-8'; //设置编辑
     form.uploadDir = "public/" + userDirPath; //设置上传目录
     form.keepExtensions = true; //保留后缀
     form.maxFieldsSize = 20 * 1024 * 1024; //文件大小 默认是20mb，超出后会触发form上的error事件
     form.addListener('file', function (name, file) {
-        // do something with uploaded file
-        // console.log(name, file);
+        allFiles.push(file.path);
+        if (allow) {
+            allow = false;
+            // 下一步如果报错就不继续处理了
+            if (filterBcak(file.type)) {
+                allow = true;
+                if (file.name) {
+                    fs.renameSync(file.path, form.uploadDir + file.name); //重命名
+                    let path = "/" + userDirPath + file.name;
+                    fileData.push({
+                        url: config.host + ":" + config.port + path,
+                        path: path,
+                        name: file.name
+                    });
+                } else {
+                    let path = file.path.replace(/^public/, "");
+                    fileData.push({
+                        url: config.host + ":" + config.port + path,
+                        path: path
+                    });
+                }
+            }
+        }
     });
-
     form.addListener('end', function () {
-        // res.end();
+        if (allow) {
+            if (fileData.length > 0) {
+                callback({
+                    code: 200,
+                    data: fileData,
+                    msg: "上传成功"
+                });
+            } else {
+                callback({
+                    code: 0,
+                    data: null,
+                    msg: "上传失败"
+                });
+            }
+        } else {
+            setTimeout(() => {
+                allFiles.forEach(url => {
+                    // 上传失败后删除掉文件
+                    fs.unlinkSync(url);
+                });
+            },500);
+        }
     });
     form.parse(req, function (err, fields, files) {
         if (err) {
@@ -64,32 +108,6 @@ function upload(req, userDirPath, filterBcak, callback) {
                 msg: err.message
             });
             return;
-        }
-        console.log(files.file);
-        if (filterBcak(files.file.type)) {
-            if (files.file.name) {
-                fs.renameSync(files.file.path, form.uploadDir + files.file.name); //重命名
-                let path = "/" + userDirPath + files.file.name;
-                callback({
-                    code: 200,
-                    data: {
-                        url: config.host + ":" + config.port  + path,
-                        path: path,
-                        name: files.file.name
-                    },
-                    msg: "上传成功"
-                });
-            } else {
-                let path = files.file.path.replace(/^public/, "");
-                callback({
-                    code: 200,
-                    data: {
-                        url: config.host + ":" + config.port + path,
-                        path: path
-                    },
-                    msg: "上传成功"
-                });
-            }
         }
     });
 };
