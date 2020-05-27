@@ -26,12 +26,16 @@ exports.createCode = function (len = 6) {
     return code;
 }
 // 生成用户token
-exports.createUserToken = function (len = 64) {
-    const x = "0123456789qwertyuioplkjhgfdsazxcvbnm";
+exports.createUserToken = function (len = 21) {
+    const x = "q4wer0ty3ui9oplkj6h7gf2dsaz5xc8vbn1m";
     let code = "";
     for (let i = 0; i < len; i++) {
         code += x.charAt(Math.ceil(Math.random() * 100000000) % x.length);
     }
+    const getTime = new Date().getTime();
+    getTime.split('').forEach(item => {
+        code = x.charAt(item) + code;
+    });
     return code;
 }
 // 创建多级目录

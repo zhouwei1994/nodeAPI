@@ -30,9 +30,14 @@ class Socket {
                 connection.on("text", function (result) {
                     const info = JSON.parse(result);
                     console.log(info);
-                    // connection.sendText({
-                    //     content: "连接成功！"
-                    // });
+                    if (info.type == "text") { 
+                        setTimeout(function () {
+                            connection.sendText(JSON.stringify({
+                                message: "收到消息【" + info.message + "】，但是我延时了4秒发送给你",
+                                type: "text"
+                            }));
+                        }, 4000);
+                    }
                 });
                 // 开启连接
                 connection.on('connect', function (code) {

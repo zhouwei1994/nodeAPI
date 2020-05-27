@@ -20,7 +20,6 @@ const httpServer = loaders(config, function (app) {
     mysql.init(config);
     //在app中注册routes该接口
     routes(app)
-    
 });
 
 

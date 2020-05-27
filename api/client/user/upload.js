@@ -1,4 +1,4 @@
-const { uploadImage, uploadFile } = require('../../plugins/upload');
+const { uploadImage, uploadFile } = require('../../../plugins/upload');
 module.exports = function (router, services) { 
     //上传图片到本地
     router.post('/api/upload/v1/upload_image', function (req, res) {

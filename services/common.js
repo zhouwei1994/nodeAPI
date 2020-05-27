@@ -6,7 +6,12 @@ module.exports = function (services, models) {
                 if (res.length > 0) {
                     let updateVersion = null;
                     res.forEach(item => {
-                        if (!updateVersion ||  updateVersion.versionCode < item.versionCode) {
+                        if (!updateVersion || updateVersion.versionCode < item.versionCode) {
+                            if (item.forceUpdate == 1) { 
+                                item.forceUpdate = true;
+                            } else {
+                                item.forceUpdate = false;
+                            }
                             updateVersion = item;
                         }
                     });

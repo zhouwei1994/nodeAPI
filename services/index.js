@@ -47,5 +47,5 @@ services.check = function (data, must, callback) {
     });
 };
 
-require('./common/common')(services, models);
-require('./common/loginRegister')(services, models);
+require('./common.js')(services, models);
+require('./client/loginRegister')(services, models);

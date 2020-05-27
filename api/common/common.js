@@ -1,11 +1,5 @@
-
+const qnUpload = require('../../plugins/qnUpload');
 module.exports = function (router, services) {
-    // APP版本更新
-    router.get('/api/common/v1/app_version', async function (req, res) {
-        let data = await services.getAppVersion(req.query);
-        res.json(data);
-    });
-
     // 地区三级联动
     router.get('/api/common/v1/region', async function (req, res) {
         let data = await services.getRegion(req.query);
@@ -16,5 +10,10 @@ module.exports = function (router, services) {
     router.get('/api/common/v1/protocol', async function (req, res) {
         let data = await services.getProtocol(req.query);
         res.json(data);
+    });
+
+    // 七牛云上传
+    router.get('/api/common/v1/qn_upload', async function (req, res) {
+        res.json(services.back(qnUpload()));
     });
 }

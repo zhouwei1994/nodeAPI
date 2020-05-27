@@ -60,6 +60,14 @@ class Redis {
             });
         });
     }
+    // 设置过期时间
+    setExpire(key, time) {
+        if (key && time) {
+            this.client.expire(key, time);
+        } else {
+            console.log("redis设置过期时间缺少key和time参数");
+        }
+    }
     endRedis() { 
         //关闭redis连接
         this.client.end(true);

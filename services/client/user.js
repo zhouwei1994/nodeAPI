@@ -1,4 +1,4 @@
-const mail = require('../plugins/send_mail');
+const mail = require('../../plugins/send_mail');
 module.exports = function (services, models) {
     services.getMailboxUser = function (data) {
         console.log(this);
